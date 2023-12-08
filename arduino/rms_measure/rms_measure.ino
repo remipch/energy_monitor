@@ -27,9 +27,9 @@ void setup() {
   Serial.println("# Ready, waiting command...");
 }
 
-// Convert analog input to volt
-float inputVoltage(int input) {
-  return input * (5.0 / 1023.0);
+// Convert analog input to millivolts
+int inputVoltage(long input) {
+  return (input * 5000) / 1023;
 }
 
 void printUnfilteredVoltage() {
@@ -82,7 +82,7 @@ void loop() {
     else if (command == "u") { // Unfiltered voltages
       mode = UNFILTERED_VOLTAGE;
       Serial.println("# Unfiltered input");
-      Serial.println("# time(ms) A7(V) A6(V) A5(V) A4(V) A3(V) A2(V) A1(V) A0(V)");
+      Serial.println("# time(ms) A7(mV) A6(mV) A5(mV) A4(mV) A3(mV) A2(mV) A1(mV) A0(mV)");
     }
     else if (command.startsWith("r")) { // RMS voltages
       mode = RMS_VOLTAGE;
@@ -91,7 +91,7 @@ void loop() {
       Serial.print("# RMS voltage, measure_duration: ");
       Serial.print(measure_duration_ms);
       Serial.println(" ms");
-      Serial.println("# start_time(ms) end_time(ms) A6(Vrms) A5(Vrms) A4(Vrms) A3(Vrms) A2(Vrms) A1(Vrms) A0(Vrms) samples_count");
+      Serial.println("# start_time(ms) end_time(ms) A6(mV) A5(mV) A4(mV) A3(mV) A2(mV) A1(mV) A0(mV) samples_count");
     }
     else {
       mode = IDLE;
