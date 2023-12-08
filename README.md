@@ -6,6 +6,7 @@ Measure and display home electric energy production and consumption.
 
 ## Architecture
 
+```
                                Raspberry Pi 3 B              Arduino Nano
                            ┌──────────────────────┐     ┌─────────────────────┐
                            │                      │     │                     │
@@ -26,6 +27,7 @@ Measure and display home electric energy production and consumption.
                            │ └──────────────────┘ │     │                     │
                            │                      │     │                     │
                            └──────────────────────┘     └─────────────────────┘
+```
 
 ## Main steps
 
@@ -59,7 +61,7 @@ The default separator is a simple space, it can be changed with this command.
 Continuously measure and print unfiltered analog voltages.
 
 - Command: `u`
-- Output example :
+- Output example:
 ```
 # Unfiltered input
 # time(ms) A7(V) A6(V) A5(V) A4(V) A3(V) A2(V) A1(V) A0(V)
@@ -84,7 +86,7 @@ Continuously measure, compute and print RMS voltages over the given measure dura
 - Command example: `r500`
 - Minimal measure duration: 40 ms
 - Maximal measure duration: 10000 ms
-- Output example :
+- Output example:
 ```
 # RMS voltage, measure_duration: 500 ms
 # start_time(ms) end_time(ms) A6(Vrms) A5(Vrms) A4(Vrms) A3(Vrms) A2(Vrms) A1(Vrms) A0(Vrms) samples_count
