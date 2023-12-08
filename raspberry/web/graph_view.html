@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+    <head>
+        <title>Energy monitor</title>
+        <link rel="stylesheet" href="style.css" />
+    </head>
+    <body onload="init()">
+        <script>
+            function init() {
+                document.getElementById('title').innerHTML = getQueryStringParam("title");
+                updateGraph();
+                setInterval(updateGraph, 5000);
+            }
+
+            // Hack: change image src to force image refresh (invalidate browser cache)
+            function updateGraph() {
+                var graph_element = document.getElementById('graph');
+                var timestamp = new Date().getTime();
+                graph_element.src = "graphs/" + getQueryStringParam("image") + '?v=' + timestamp;
+
+            }
+
+            function getQueryStringParam(name) {
+                var params = window.location.search.slice(1).split("&");
+                for (var i = 0; i < params.length; i++) {
+                    var param = params[i].split("=");
+                    if (param[0] === name) {
+                        return decodeURIComponent(param[1]);
+                    }
+                }
+                return null;
+            }
+        </script>
+        <h1 id="title"><!--text initialized in init--></h1>
+        <img id="graph"><!--src initialized in init-->
+    </body>
+</html>
