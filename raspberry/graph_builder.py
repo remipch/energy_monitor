@@ -13,10 +13,10 @@ import shutil
 TMP_PATH = 'web/graphs/tmp.svg'
 OUT_PATH = 'web/graphs/minute.svg'
 TIME_SPAN = timedelta(minutes=1)
-SIMU = True # True False
+SIMU = False # True False
 MAX_ARRAY_LEN = 200
 
-fig, ax = plt.subplots(figsize=(4, 6))
+fig, ax = plt.subplots(figsize=(4, 6), layout="constrained")
 plt.title('Last minute')
 plt.xlabel('Time')
 plt.ylabel('Voltage (mV)')
