@@ -4,13 +4,8 @@
         <title>Energy monitor</title>
         <link rel="stylesheet" href="style.css" />
     </head>
-    <body onload="init()">
+    <body onload="updateGraph()">
         <script>
-            function init() {
-                updateGraph();
-                setInterval(updateGraph, 5000);
-            }
-
             // Hack: change image src to force image refresh (invalidate browser cache)
             function updateGraph() {
                 var graph_element = document.getElementById('graph');
@@ -30,6 +25,7 @@
                 return null;
             }
         </script>
+        <button onclick="updateGraph()">Update</button>
         <img id="graph"><!--src initialized in init-->
     </body>
 </html>
