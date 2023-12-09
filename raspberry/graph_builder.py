@@ -2,27 +2,24 @@
 # pip install pyserial
 
 import serial
+from datetime import datetime, timedelta
 import matplotlib.pyplot as plt
-from datetime import datetime
 import matplotlib.dates as mdates
+import matplotlib.ticker as mticker
 import sys
 import random
+import shutil
 
-# SIMU = True
-SIMU = False
+TMP_PATH = 'web/graphs/tmp.svg'
+OUT_PATH = 'web/graphs/minute.svg'
+TIME_SPAN = timedelta(minutes=1)
+SIMU = True # True False
 MAX_ARRAY_LEN = 200
 
-# Exit application when escape key is pressed
-def on_key(event):
-   if event.key == 'escape':
-       sys.exit(0)
-
 fig, ax = plt.subplots(figsize=(4, 6))
-fig.canvas.mpl_connect('key_press_event', on_key)
-ax.xaxis.set_major_locator(mdates.AutoDateLocator(minticks=1, maxticks=3))
-ax.xaxis.set_major_formatter(mdates.DateFormatter('%H:%M:%S'))
-plt.title('Voltage (mV)')
+plt.title('Last minute')
 plt.xlabel('Time')
+plt.ylabel('Voltage (mV)')
 
 time = []
 voltage = []
@@ -31,25 +28,39 @@ graph, = ax.plot(time, voltage)
 
 def update():
     global time, voltage
+
+    if len(time)<2:
+        return
+
     if len(time)>MAX_ARRAY_LEN:
         remove_count = len(time) - MAX_ARRAY_LEN
         time = time[remove_count:]
         voltage = voltage[remove_count:]
+
+    max_time = max(time)
+    min_time = max_time - TIME_SPAN
+    mid_time = min_time + (max_time - min_time) / 2
+    xticks = [min_time, mid_time, max_time]
+    xlabels = [x.strftime("%H:%M:%S") for x in xticks] # for dates: "%Y-%m-%d"
+    ax.set_xticks(xticks, labels=xlabels)
+    ax.set_xlim(min_time, max_time)
     graph.set_data(time, voltage)
+
     ax.relim()
-    ax.autoscale_view()
-    plt.draw()
-    plt.savefig("web/graphs/day.svg", transparent=True)
-    plt.pause(0.001)
+    ax.autoscale_view(scaley=True, scalex=False)
+    fig.canvas.draw()
+
+    # write in a temp file and quick copy to output to avoid temporary broken file
+    fig.savefig(TMP_PATH)
+    shutil.copy(TMP_PATH, OUT_PATH)
 
 if SIMU:
-    for i in range(30):
+    for i in range(300):
+        now = datetime.now()
+        print(now)
+        time.append(now)
+        voltage.append(random.randint(1,10))
         update()
-        for j in range(10):
-            now = datetime.now()
-            time.append(now)
-            voltage.append(random.randint(1,10))
-            plt.pause(0.05)
 
 else:
     ser = serial.Serial('/dev/ttyUSB0', 115200, timeout=1)
