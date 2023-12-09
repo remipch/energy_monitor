@@ -7,7 +7,6 @@
     <body onload="init()">
         <script>
             function init() {
-                document.getElementById('title').innerHTML = getQueryStringParam("title");
                 updateGraph();
                 setInterval(updateGraph, 5000);
             }
@@ -31,7 +30,6 @@
                 return null;
             }
         </script>
-        <h1 id="title"><!--text initialized in init--></h1>
         <img id="graph"><!--src initialized in init-->
     </body>
 </html>
