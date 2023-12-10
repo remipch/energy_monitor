@@ -4,7 +4,14 @@
         <title>Energy monitor</title>
         <link rel="stylesheet" href="style.css" />
     </head>
-    <body>
+    <body onload="setDownloadLink()">
+        <script>
+            function setDownloadLink() {
+                // download link is the same IP address on a different port
+                download_element = document.getElementById('download')
+                download_element.href = window.location.protocol + "//" + window.location.hostname + ":8001";
+            }
+        </script>
         <h1>Energy monitor</h1>
         <a href="graph_view.html?image=minute.svg">
             <button type="button">Minute view</button>
@@ -20,6 +27,9 @@
         </a>
         <a href="graph_view.html?image=month.svg">
             <button type="button">Month view</button>
+        </a>
+        <a href="data" id="download">
+            <button type="button">Download data</button>
         </a>
     </body>
 </html>
