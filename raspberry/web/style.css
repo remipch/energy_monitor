@@ -21,6 +21,7 @@ h1, h2, h3 {
 }
 
 button {
+    background-color: #ddeaff;
     border-radius: 50px;
     -moz-border-radius: 50px;
     -webkit-border-radius: 50px;
@@ -28,6 +29,14 @@ button {
     width: 90%;
     height: 150px;
     font-size: 60px;
+}
+
+button:focus {
+ background-color: #ddeaff;
+}
+
+button:active { /*must be defined after button:focus*/
+ background-color: #b3c7ff;
 }
 
 img {
