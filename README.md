@@ -7,26 +7,36 @@ Measure and display home electric energy production and consumption.
 ## Architecture
 
 ```
-                               Raspberry Pi 3 B              Arduino Nano
-                           ┌──────────────────────┐     ┌─────────────────────┐
-                           │                      │     │                     │
-                           │ ┌──────────────────┐ │ USB │ ┌─────────────────┐ │
-                           │ │ graph_builder.py ├─┼─────┼─► rms_measure.ino │ │
-                           │ └───────┬──────────┘ │     │ └─────────────────┘ │
-                           │         │write       │     │                     │
-                           │ ┌───────▼──────────┐ │     │                     │
-          Client           │ │    graph.png     │ │     │                  a0 │-O
-    ┌───────────────┐      │ └───────▲──────────┘ │     │                  a1 │--O
-    │               │      │         │read        │     │                  a2 │---O
-    │ ┌───────────┐ │ Wifi │ ┌───────┴──────────┐ │     │          analog  a3 │----O   current
-    │ │web_browser├─┼──────┼─►  http_server.py  │ │     │          inputs  a4 │-----O   transformers
-    │ └───────────┘ │      │ └───────┬──────────┘ │     │                  a5 │------O
-    │               │      │         │read        │     │                  a6 │-------O
-    └───────────────┘      │ ┌───────▼──────────┐ │     │                  a7 │--------O
-                           │ │    index.html    │ │     │                     │
-                           │ └──────────────────┘ │     │                     │
-                           │                      │     │                     │
-                           └──────────────────────┘     └─────────────────────┘
+                                      Raspberry Pi 3 B               Arduino Nano
+                                  ┌───────────────────────┐     ┌─────────────────────┐
+                        port 8001 │ ┌───────────────────┐ │     │                     │
+                      ┌───────────┼─►    http server    │ │     │                     │
+                      │           │ └────────┬──────────┘ │     │                     │
+                      │           │          │ read       │     │                     │
+                      │           │ ┌────────▼──────────┐ │     │                     │
+                      │           │ │data/seconds/*.csv │ │     │                     │
+         Client       │           │ │data/minutes/*.csv │ │     │                     │
+   ┌───────────────┐  │           │ └────────▲──────────┘ │     │                     │
+   │               │  │           │          │ write      │     │                     │
+   │ ┌───────────┐ │  │           │ ┌────────┴──────────┐ │ USB │ ┌─────────────────┐ │
+   │ │web_browser├─┼──┤           │ │data_recorder.py   ├─┼─────┼─► rms_measure.ino │ │
+   │ └───────────┘ │  │           │ └────────┬──────────┘ │     │ └──────────┬──────┘ │
+   │               │  │           │          │ write      │     │            │        │
+   └───────────────┘  │           │ ┌────────▼──────────┐ │     │            │        │
+                      │           │ │graphs/hour.svg    │ │     │       read │        │
+                      │           │ │graphs/minute.svg  │ │     │            │        │
+                      │           │ └────────▲──────────┘ │     │            │        │
+                      │           │          │ read       │     │            │     a0 │
+                      │ port 8000 │ ┌────────┴──────────┐ │     │            │     a1 │
+                      └───────────┼─►    http server    │ │     │            ▼     a2 │
+                                  │ └────────┬──────────┘ │     │          analog  a3 │
+                                  │          │ read       │     │          inputs  a4 │
+                                  │ ┌────────▼──────────┐ │     │                  a5 │
+                                  │ │index.html         │ │     │                  a6 │
+                                  │ │graph_view.html    │ │     │                  a7 │
+                                  │ │style.css          │ │     │                     │
+                                  │ └───────────────────┘ │     │                     │
+                                  └───────────────────────┘     └─────────────────────┘
 ```
 
 ## Main steps
@@ -38,8 +48,13 @@ Measure and display home electric energy production and consumption.
     - current transformer ratio
     - burden resistor
     - optional calibration
-- Build a beautiful graph (python or fortran ?)
-- Serve a simple web page over Wifi (minimal python web server)
+- Build graphs (last minute, last hour)
+- Log measure data in timestamped files:
+    - one file per day, one measure per second
+    - one file per day, one measure per minute
+- Publish results over Wifi (using python http server):
+    - show graphs in minimal web page
+    - allow to download measure data
 
 ## Serial protocol
 
