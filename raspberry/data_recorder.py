@@ -32,7 +32,7 @@ MINUTES_MAX_SIZE_BYTES = 2000000000 # 2 GB
 
 # Minutes measure is the average of all seconds measure if there is enough measure to be meaningful
 # (10 s loss per minute is accepted)
-MINUTES_MIN_MEASURES_COUNT = 10
+MINUTES_MIN_MEASURES_COUNT = 50
 
 LAST_MINUTE_IMAGE_PATH = "web/graphs/minute.svg"
 LAST_HOUR_IMAGE_PATH = "web/graphs/hour.svg"
@@ -98,7 +98,9 @@ while(True):
     seconds_file.write(now, all_fields)
 
     # Update last minute graph
-    last_minute_graph.add(now, [measure_ma[4], measure_ma[5], measure_ma[6]])
+    # last_minute_graph is slow to compute, only compute every 10 seconds (apart 0 because hour graph has been computed too)
+    if now.second != 0 and (now.second % 10)==0:
+        last_minute_graph.add(now, [measure_ma[4], measure_ma[5], measure_ma[6]])
 
     # Store current second in minute
     minute_measures_ma.append(measure_ma)
