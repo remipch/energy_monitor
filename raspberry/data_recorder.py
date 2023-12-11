@@ -4,7 +4,8 @@
 import serial
 import csv
 from data_file import DataFile
-from datetime import datetime
+from graph_builder import GraphBuilder
+from datetime import datetime, timedelta
 import os
 
 ser = serial.Serial('/dev/ttyUSB0', 115200, timeout=1)
@@ -33,9 +34,19 @@ MINUTES_MAX_SIZE_BYTES = 2000000000 # 2 GB
 # (10 s loss per minute is accepted)
 MINUTES_MIN_MEASURES_COUNT = 10
 
+LAST_MINUTE_IMAGE_PATH = "web/graphs/minute.svg"
+
 seconds_file = DataFile(SECONDS_DIRECTORY, SECONDS_HEADER, SECONDS_MAX_SIZE_BYTES)
 
 minutes_file = DataFile(MINUTES_DIRECTORY, MINUTES_HEADER, MINUTES_MAX_SIZE_BYTES)
+
+last_minute_graph = GraphBuilder(
+    LAST_MINUTE_IMAGE_PATH,
+    "Last minute",
+    "Current (mA)",
+    ["A0", "A1", "A2"],
+    "%H:%M:%S",
+    timedelta(minutes=1))
 
 previous_minute_time = None
 minute_measures_ma = []
@@ -74,6 +85,9 @@ while(True):
     all_fields = [now.hour, now.minute, now.second] + measure_ma
     print("Add second: ", all_fields)
     seconds_file.write(now, all_fields)
+
+    # Update last minute graph
+    last_minute_graph.add(now, [measure_ma[4], measure_ma[5], measure_ma[6]])
 
     # Store current second in minute
     minute_measures_ma.append(measure_ma)
