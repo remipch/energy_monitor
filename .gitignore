@@ -2,3 +2,5 @@
 /raspberry/web/web_data.log
 /raspberry/web/web_interface.log
 /raspberry/__pycache__/
+/raspberry/web/data/
+/raspberry/web/graphs/
