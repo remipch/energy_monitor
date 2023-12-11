@@ -3,7 +3,7 @@ from data_file import DataFile
 from datetime import datetime
 import tempfile
 
-PATH_PREFIX = tempfile.gettempdir()+"/test_data_file-"
+PATH_PREFIX = tempfile.gettempdir()+"/test_data_file/"
 FIRST_PATH = PATH_PREFIX+"2023-12-10.csv"
 SECOND_PATH = PATH_PREFIX+"2023-12-11.csv"
 
@@ -37,3 +37,10 @@ now = datetime(2023,12,11,15,47,13)
 data_file.write(now, [3,30])
 assertFileContent(FIRST_PATH, "a,b\n1,10\n2,20\n")
 assertFileContent(SECOND_PATH, "a,b\n3,30\n")
+
+# open a new data_file on existing file
+data_file_2 = DataFile(PATH_PREFIX, ["a","b"])
+now = datetime(2023,12,11,15,48,12)
+data_file.write(now, [4,40])
+assertFileContent(FIRST_PATH, "a,b\n1,10\n2,20\n")
+assertFileContent(SECOND_PATH, "a,b\n3,30\n4,40\n")
