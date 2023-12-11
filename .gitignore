@@ -1,3 +1,4 @@
 /raspberry/web/http_servers_pid.txt
 /raspberry/web/web_data.log
 /raspberry/web/web_interface.log
+/raspberry/__pycache__/
