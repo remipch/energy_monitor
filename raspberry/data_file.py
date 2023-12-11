@@ -34,32 +34,30 @@ class DataFile:
         assert len(values)==len(self.header)
 
         path = self.directory + now.strftime("%Y-%m-%d") + ".csv"
-        if not os.path.isfile(path):
-            print("No existing file: create new file")
-            self.__createFile(path)
 
-        elif self.file is None:
-            print("Open existing file")
+        if self.file is None:
             self.__openFile(path)
 
         elif now.date() != self.previous_date:
-            print("New day: close current file and create a new file")
+            print("New day: close current file and open new file")
             self.close()
-            self.__createFile(path)
+            self.__openFile(path)
 
         # Write and flush
         self.writer.writerow(values)
         self.file.flush()
         self.previous_date = now.date()
 
-    def __createFile(self, path):
-        if self.max_size_bytes is not None:
-            purge_data_directory(self.directory, self.max_size_bytes)
-        self.__openFile(path)
-        print("Write header")
-        self.writer.writerow(self.header)
-
     def __openFile(self, path):
-        print("Open file: ", path)
-        self.file = open(path, 'a', newline='')
-        self.writer = csv.writer(self.file)
+        if os.path.isfile(path):
+            print("Open existing file: ", path)
+            self.file = open(path, 'a', newline='')
+            self.writer = csv.writer(self.file)
+        else:
+            print("Create new file: ", path)
+            if self.max_size_bytes is not None:
+                purge_data_directory(self.directory, self.max_size_bytes)
+            self.file = open(path, 'a', newline='')
+            self.writer = csv.writer(self.file)
+            self.writer.writerow(self.header)
+
