@@ -25,11 +25,24 @@ SECONDS_DIRECTORY = 'web/data/seconds/'
 SECONDS_HEADER = ["hour", "minute", "second", "a6(mA)", "a5(mA)", "a4(mA)", "a3(mA)", "a2(mA)", "a1(mA)", "a0(mA)"]
 SECONDS_MAX_SIZE_BYTES = 20000000 # 20 MB
 
+MINUTES_DIRECTORY = 'web/data/minutes/'
+MINUTES_HEADER = ["hour", "minute", "a6(mA)", "a5(mA)", "a4(mA)", "a3(mA)", "a2(mA)", "a1(mA)", "a0(mA)"]
+MINUTES_MAX_SIZE_BYTES = 2000000000 # 2 GB
+
+# Minutes measure is the average of all seconds measure if there is enough measure to be meaningful
+# (10 s loss per minute is accepted)
+MINUTES_MIN_MEASURES_COUNT = 10
+
 seconds_file = DataFile(SECONDS_DIRECTORY, SECONDS_HEADER, SECONDS_MAX_SIZE_BYTES)
+
+minutes_file = DataFile(MINUTES_DIRECTORY, MINUTES_HEADER, MINUTES_MAX_SIZE_BYTES)
+
+previous_minute_time = None
+minute_measures_ma = []
 
 ser.write(b'r1000')
 
-for i in range(100):
+while(True):
     now = datetime.now()
 
     line = ser.readline().decode("utf-8")
@@ -40,13 +53,27 @@ for i in range(100):
         print(line, end="")
         continue
 
+    # Compute and record previous minute average is minute just changed
+    minute_time = now.replace(second=0, microsecond=0)
+    if minute_time!=previous_minute_time and len(minute_measures_ma) >= MINUTES_MIN_MEASURES_COUNT:
+        minute_average_ma = [int(sum(meas)/len(meas)) for meas in zip(*minute_measures_ma)]
+        all_fields = [previous_minute_time.hour, previous_minute_time.minute] + minute_average_ma
+        print("Add minute: ", all_fields)
+        print("minute_measures_ma: ", minute_measures_ma)
+
+        minutes_file.write(previous_minute_time, all_fields)
+        minute_measures_ma = []
+    previous_minute_time = minute_time
+
     print('#', line, end="")
 
-    date_fields = [now.hour, now.minute, now.second]
+    # Record current second
     fields = line.split()
     measure_mv = [fields[2], fields[3], fields[4], fields[5], fields[6], fields[7], fields[8]]
     measure_ma = [int(k*float(mv)) for mv, k in zip(measure_mv, MEASURE_COEF)]
-
-    all_fields = date_fields + measure_ma
-    print(all_fields)
+    all_fields = [now.hour, now.minute, now.second] + measure_ma
+    print("Add second: ", all_fields)
     seconds_file.write(now, all_fields)
+
+    # Store current second in minute
+    minute_measures_ma.append(measure_ma)
