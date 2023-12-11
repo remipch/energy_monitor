@@ -53,7 +53,7 @@ while(True):
         print(line, end="")
         continue
 
-    # Compute and record previous minute average is minute just changed
+    # Compute and record previous minute average if minute just changed
     minute_time = now.replace(second=0, microsecond=0)
     if minute_time!=previous_minute_time and len(minute_measures_ma) >= MINUTES_MIN_MEASURES_COUNT:
         minute_average_ma = [int(sum(meas)/len(meas)) for meas in zip(*minute_measures_ma)]
