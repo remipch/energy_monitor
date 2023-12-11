@@ -1,6 +1,3 @@
-
-# pip install pyserial
-
 import csv
 from datetime import datetime
 from purge_data_directory import purge_data_directory
