@@ -3,6 +3,7 @@
 
 import csv
 from datetime import datetime
+from purge_data_directory import purge_data_directory
 import os
 
 class DataFile:
@@ -10,9 +11,11 @@ class DataFile:
     # - first line is the header
     # - next lines are data
 
-    def __init__(self, path_prefix, header):
-        self.path_prefix = path_prefix
+    # max_size_bytes: auto remove data files when total data file size is greater
+    def __init__(self, directory, header, max_size_bytes = None):
+        self.directory = directory + "/"
         self.header = header
+        self.max_size_bytes = max_size_bytes
         self.file = None
         self.writer = None
         self.previous_date = None
@@ -27,7 +30,7 @@ class DataFile:
     def write(self, now, values):
         assert len(values)==len(self.header)
 
-        path = self.path_prefix + now.strftime("%Y-%m-%d") + ".csv"
+        path = self.directory + now.strftime("%Y-%m-%d") + ".csv"
         if not os.path.isfile(path):
             print("No existing file: create new file")
             self.__createFile(path)
@@ -37,9 +40,9 @@ class DataFile:
             self.__openFile(path)
 
         elif now.date() != self.previous_date:
-            print("New day: close current file")
+            print("New day: close current file and create a new file")
             self.close()
-            self.__openFile(path)
+            self.__createFile(path)
 
         # Write and flush
         self.writer.writerow(values)
@@ -47,6 +50,8 @@ class DataFile:
         self.previous_date = now.date()
 
     def __createFile(self, path):
+        if self.max_size_bytes is not None:
+            purge_data_directory(self.directory, self.max_size_bytes)
         self.__openFile(path)
         print("Write header")
         self.writer.writerow(self.header)

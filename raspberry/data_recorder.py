@@ -21,10 +21,11 @@ while True:
 # depends on transformer ratio and burden resistor
 MEASURE_COEF = [30, 30, 30, 30, 30, 30, 30]
 
-SECONDS_PATH_PREFIX = 'web/data/seconds/'
+SECONDS_DIRECTORY = 'web/data/seconds/'
 SECONDS_HEADER = ["hour", "minute", "second", "a6(mA)", "a5(mA)", "a4(mA)", "a3(mA)", "a2(mA)", "a1(mA)", "a0(mA)"]
+SECONDS_MAX_SIZE_BYTES = 20000000 # 20 MB
 
-seconds_file = DataFile(SECONDS_PATH_PREFIX, SECONDS_HEADER)
+seconds_file = DataFile(SECONDS_DIRECTORY, SECONDS_HEADER, SECONDS_MAX_SIZE_BYTES)
 
 ser.write(b'r1000')
 
