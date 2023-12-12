@@ -6,6 +6,8 @@ import os
 import shutil
 
 
+MAX_DATA_COUNT = 100
+
 class GraphBuilder:
 
     def __init__(self,
@@ -43,16 +45,14 @@ class GraphBuilder:
         self.times.append(time)
         self.values.append(values)
 
-        # Remove old values apart the "most recent old", it will be drawn outside the time axis
-        # and ensure the line stays continuous
+        # Remove old data
+        if len(self.times)>MAX_DATA_COUNT:
+            remove_count = len(self.times) - MAX_DATA_COUNT
+            self.times = self.times[remove_count:]
+            self.values = self.values[remove_count:]
+
         max_time = time
         min_time = time - self.time_span
-        for i, t in enumerate(self.times):
-            if t<min_time and self.times[i+1]<min_time:
-                self.times.pop(i)
-                self.values.pop(i)
-            else:
-                break
 
         # Set x axis scale
         mid_time = min_time + (max_time - min_time) / 2
