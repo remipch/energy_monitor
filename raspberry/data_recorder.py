@@ -4,12 +4,10 @@
 import serial
 import csv
 from data_file import DataFile
-from graph_builder import GraphBuilder
-from datetime import datetime, timedelta
+from datetime import datetime
 import os
 
 ser = serial.Serial('/dev/ttyUSB0', 115200, timeout=1)
-
 
 # Wait arduino startup
 while True:
@@ -41,23 +39,8 @@ seconds_file = DataFile(SECONDS_DIRECTORY, SECONDS_HEADER, SECONDS_MAX_SIZE_BYTE
 
 minutes_file = DataFile(MINUTES_DIRECTORY, MINUTES_HEADER, MINUTES_MAX_SIZE_BYTES)
 
-last_minute_graph = GraphBuilder(
-    LAST_MINUTE_IMAGE_PATH,
-    "Last minute",
-    "Current (mA)",
-    ["A0", "A1", "A2"],
-    "%H:%M:%S",
-    timedelta(minutes=1))
-
-last_hour_graph = GraphBuilder(
-    LAST_HOUR_IMAGE_PATH,
-    "Last hour",
-    "Current (mA)",
-    ["A0", "A1", "A2"],
-    "%H:%M:%S",
-    timedelta(hours=1))
-
 previous_minute_time = None
+
 minute_measures_ma = []
 
 ser.write(b'r1000')
@@ -81,8 +64,6 @@ while(True):
         print("Add minute: ", all_fields)
         print("minute_measures_ma: ", minute_measures_ma)
 
-        last_hour_graph.add(previous_minute_time, [minute_average_ma[4], minute_average_ma[5], minute_average_ma[6]])
-
         minutes_file.write(previous_minute_time, all_fields)
         minute_measures_ma = []
     previous_minute_time = minute_time
@@ -96,11 +77,6 @@ while(True):
     all_fields = [now.hour, now.minute, now.second] + measure_ma
     print("Add second: ", all_fields)
     seconds_file.write(now, all_fields)
-
-    # Update last minute graph
-    # last_minute_graph is slow to compute, only compute every 10 seconds (apart 0 because hour graph has been computed too)
-    if now.second != 0 and (now.second % 10)==0:
-        last_minute_graph.add(now, [measure_ma[4], measure_ma[5], measure_ma[6]])
 
     # Store current second in minute
     minute_measures_ma.append(measure_ma)
