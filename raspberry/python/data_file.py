@@ -10,7 +10,7 @@ class DataFile:
 
     # max_size_bytes: auto remove data files when total data file size is greater
     def __init__(self, directory, header, max_size_bytes = None):
-        self.directory = directory + "/"
+        self.directory = directory
         assert not os.path.isfile(self.directory)
         if not os.path.isdir(self.directory):
             os.makedirs(self.directory)
@@ -30,7 +30,7 @@ class DataFile:
     def write(self, now, values):
         assert len(values)==len(self.header)
 
-        path = self.directory + now.strftime("%Y-%m-%d") + ".csv"
+        path = self.directory / (now.strftime("%Y-%m-%d") + ".csv")
 
         if self.file is None:
             self.__openFile(path)

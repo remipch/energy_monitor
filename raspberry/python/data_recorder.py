@@ -6,6 +6,7 @@ import csv
 from data_file import DataFile
 from datetime import datetime
 import os
+from pathlib import Path
 
 ser = serial.Serial('/dev/ttyUSB0', 115200, timeout=1)
 
@@ -20,11 +21,14 @@ while True:
 # depends on transformer ratio and burden resistor
 MEASURE_COEF = [30, 30, 30, 30, 30, 30, 30]
 
-SECONDS_DIRECTORY = 'web/data/seconds/'
+# Get dir of the current python script
+python_directory = Path(os.path.abspath(__file__)).parent
+
+seconds_directory = python_directory / "../web/data/seconds/"
 SECONDS_HEADER = ["hour", "minute", "second", "a6(mA)", "a5(mA)", "a4(mA)", "a3(mA)", "a2(mA)", "a1(mA)", "a0(mA)"]
 SECONDS_MAX_SIZE_BYTES = 20000000 # 20 MB
 
-MINUTES_DIRECTORY = 'web/data/minutes/'
+minutes_directory = python_directory / "../web/data/minutes/"
 MINUTES_HEADER = ["hour", "minute", "a6(mA)", "a5(mA)", "a4(mA)", "a3(mA)", "a2(mA)", "a1(mA)", "a0(mA)"]
 MINUTES_MAX_SIZE_BYTES = 2000000000 # 2 GB
 
@@ -35,9 +39,9 @@ MINUTES_MIN_MEASURES_COUNT = 50
 LAST_MINUTE_IMAGE_PATH = "web/graphs/minute.svg"
 LAST_HOUR_IMAGE_PATH = "web/graphs/hour.svg"
 
-seconds_file = DataFile(SECONDS_DIRECTORY, SECONDS_HEADER, SECONDS_MAX_SIZE_BYTES)
+seconds_file = DataFile(seconds_directory, SECONDS_HEADER, SECONDS_MAX_SIZE_BYTES)
 
-minutes_file = DataFile(MINUTES_DIRECTORY, MINUTES_HEADER, MINUTES_MAX_SIZE_BYTES)
+minutes_file = DataFile(minutes_directory, MINUTES_HEADER, MINUTES_MAX_SIZE_BYTES)
 
 previous_minute_time = None
 

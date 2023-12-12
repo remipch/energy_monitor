@@ -1,15 +1,11 @@
 from datetime import datetime, timedelta
 import matplotlib.pyplot as plt
-import matplotlib.dates as mdates
-import matplotlib.ticker as mticker
 import os
 import shutil
-from timeit import timeit
 from collections import deque
 from io import StringIO
 import pandas as pd
 
-import time as t
 
 # Input csv must :
 # - respect name pattern: yyyy-mm-dd.csv
@@ -32,7 +28,7 @@ class GraphBuilder:
 
         assert len(columns)==len(labels)
 
-        self.input_directory = input_directory + "/"
+        self.input_directory = input_directory
         self.line_count = line_count
         self.columns = columns
         self.output_image_path = output_image_path
@@ -69,14 +65,14 @@ class GraphBuilder:
 
     # Recompute and save graph if file has been modified
     def update(self, now):
-        input_csv_path = self.input_directory + now.strftime("%Y-%m-%d") + ".csv"
+        input_csv_path = self.input_directory / (now.strftime("%Y-%m-%d") + ".csv")
 
         modification_time = os.path.getmtime(input_csv_path)
 
         if self.modification_time == modification_time:
             return
 
-        print("Update graph from " + input_csv_path)
+        print("Update graph from ", input_csv_path)
         self.modification_time = modification_time
 
         # Read last csv lines and add a time column

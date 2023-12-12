@@ -1,13 +1,18 @@
 from graph_builder import GraphBuilder
 from datetime import datetime,timedelta
 import time
+import os
+from pathlib import Path
+
+# Get dir of the current python script
+python_directory = Path(os.path.abspath(__file__)).parent
 
 graph_builder = GraphBuilder(
-    "web/data/minutes/",
+    python_directory / "../web/data/minutes/",
     100,
     ["a0(mA)", "a1(mA)"],
     ["A0", "A1"],
-    "web/graphs/hour.svg",
+    python_directory / "../web/graphs/hour.svg",
     "Last hour",
     "Current (mA)",
     "%H:%M",
