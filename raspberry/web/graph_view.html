@@ -4,8 +4,15 @@
         <title>Energy monitor</title>
         <link rel="stylesheet" href="style.css" />
     </head>
-    <body onload="updateGraph()">
+    <body onload="init()">
         <script>
+            var timer = null;
+
+            function init() {
+                updateGraph();
+                toggleMode(); // enable
+            }
+
             // Hack: change image src to force image refresh (invalidate browser cache)
             function updateGraph() {
                 var graph_element = document.getElementById('graph');
@@ -24,8 +31,24 @@
                 }
                 return null;
             }
+
+            function toggleMode() {
+                var mode_element = document.getElementById('mode');
+
+                if(timer==null) {
+                    timer = setInterval(updateGraph, 5000);
+                    mode_element.innerHTML = "Auto-update enabled";
+                    mode_element.classList.add('active');
+                }
+                else {
+                    clearInterval(timer);
+                    timer = null;
+                    mode_element.innerHTML = "Auto-update disabled";
+                    mode_element.classList.remove('active');
+                }
+            };
         </script>
-        <img id="graph"><!--src initialized in init-->
-        <button onclick="updateGraph()">Update</button>
+        <img id="graph"><!--src initialized in 'updateGraph()'-->
+        <button id="mode" onclick="toggleMode()"><!--text defined in 'toggleMode()'--></button>
     </body>
 </html>
