@@ -4,10 +4,10 @@ script_dir=$(dirname "$0")
 
 $script_dir/stop_http_servers.sh
 
-web_interface_folder=$script_dir
+web_interface_folder=$script_dir/web
 web_interface_port=8000
 
-web_data_folder=$script_dir/data
+web_data_folder=$script_dir/web/data
 web_data_port=8001
 
 ip_address=$(hostname -I | awk '{print $1}')
