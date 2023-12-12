@@ -93,7 +93,7 @@ class GraphBuilder:
         min_time = max_time - self.time_span
 
         # Filter rows after min_time
-        filtered_df = df[(df['time'] > min_time)]
+        filtered_df = df[(df['time'] >= min_time)]
         print(filtered_df)
         times = filtered_df['time']
         filtered_df = filtered_df[self.columns]
