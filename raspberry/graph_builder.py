@@ -67,7 +67,7 @@ class GraphBuilder:
             df = pd.read_csv(StringIO('\n'.join(q)))
             return df
 
-    # Recompute and save graph is file has been modified
+    # Recompute and save graph if file has been modified
     def update(self, now):
         input_csv_path = self.input_directory + now.strftime("%Y-%m-%d") + ".csv"
 
