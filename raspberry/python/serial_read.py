@@ -1,5 +1,5 @@
 
-# pip install pyserial
+# This file is for debug purpose only
 
 import serial
 

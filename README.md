@@ -56,6 +56,24 @@ Measure and display home electric energy production and consumption.
     - show graphs in minimal web page
     - allow to download measure data
 
+## Folder structure
+
+Source and generated files are in the following hardcoded folder structure :
+
+```
+Folder                  Description
+----------------------  ---------------------
+arduino/                Runs on Arduino
+    rms_measure/        Measure analog inputs and compute RMS
+raspberry/              Runs on Raspberry
+    python/             Tools to record data and build graphs
+    web/                Files required to serve http servers
+        data/           Generated CSV files of recorded measures
+            seconds/    One line per second
+            minutes/    One line per minute
+        graphs/         Generated SVG images
+```
+
 ## Serial protocol
 
 Arduino listen commands from Raspberry and print measures as numerical text values.
