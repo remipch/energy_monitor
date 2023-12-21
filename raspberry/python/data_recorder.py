@@ -8,7 +8,7 @@ from datetime import datetime
 import os
 from pathlib import Path
 
-ser = serial.Serial('/dev/ttyUSB0', 115200, timeout=1)
+ser = serial.Serial('/dev/ttyACM0', 115200, timeout=1)
 
 # Wait arduino startup
 while True:
