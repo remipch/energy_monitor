@@ -67,6 +67,9 @@ class GraphBuilder:
     def update(self, now):
         input_csv_path = self.input_directory / (now.strftime("%Y-%m-%d") + ".csv")
 
+        if not os.path.isfile(input_csv_path):
+            return
+
         modification_time = os.path.getmtime(input_csv_path)
 
         if self.modification_time == modification_time:
