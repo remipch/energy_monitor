@@ -18,6 +18,8 @@ graph_builder = GraphBuilder(
     "%H:%M",
     timedelta(hours=1))
 
+print("Hour graph_builder started, waiting data from csv...")
+
 while True:
     graph_builder.update(datetime.now())
     time.sleep(1)
