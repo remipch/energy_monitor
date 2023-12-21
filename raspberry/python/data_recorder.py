@@ -8,6 +8,8 @@ from datetime import datetime
 import os
 from pathlib import Path
 
+print("Start data_recorder")
+
 ser = serial.Serial('/dev/ttyACM0', 115200, timeout=1)
 
 # Wait arduino startup
