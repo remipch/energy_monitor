@@ -74,6 +74,19 @@ raspberry/              Runs on Raspberry
         graphs/         Generated SVG images
 ```
 
+## Install
+
+### Dependencies
+
+```
+sudo apt-get install libopenblas-dev
+sudo apt-get install libatlas-base-dev
+pip install numpy==1.22.4
+pip install pandas
+pip uninstall matplotlib
+pip install matplotlib==3.6
+```
+
 ## Serial protocol
 
 Arduino listen commands from Raspberry and print measures as numerical text values.
