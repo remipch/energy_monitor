@@ -87,6 +87,22 @@ pip uninstall matplotlib
 pip install matplotlib==3.6
 ```
 
+### Autostart
+
+If Raspberry Pi has been installed with the default desktop,
+autostart can be setup by adding the following lines
+to `/etc/xdg/lxsession/LXDE-pi/autostart` :
+
+```
+@lxterminal -e bash /home/pi/energy_monitor/raspberry/run_web_interface.sh
+@lxterminal -e bash /home/pi/energy_monitor/raspberry/run_web_data.sh
+@lxterminal -e bash /home/pi/energy_monitor/raspberry/run_data_recorder.sh
+@lxterminal -e bash /home/pi/energy_monitor/raspberry/run_minute_graph_builder.sh
+@lxterminal -e bash /home/pi/energy_monitor/raspberry/run_hour_graph_builder.sh
+```
+
+(from https://forums.raspberrypi.com/viewtopic.php?t=294014)
+
 ## Serial protocol
 
 Arduino listen commands from Raspberry and print measures as numerical text values.
