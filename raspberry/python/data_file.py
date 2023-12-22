@@ -2,6 +2,7 @@ import csv
 from datetime import datetime
 from purge_data_directory import purge_data_directory
 import os
+from repair_csv import repair_last_csv_in_directory
 
 class DataFile:
     # File format (csv) :
@@ -19,6 +20,11 @@ class DataFile:
         self.file = None
         self.writer = None
         self.previous_date = None
+
+        # Try to repair the last csv file in the data folder
+        # csv file can be corrupted if the system has been powered off
+        # while DataFile was writing to it
+        repair_last_csv_in_directory(directory, len(header))
 
     def close(self):
         if self.file is not None:
@@ -57,4 +63,3 @@ class DataFile:
             self.file = open(path, 'a', newline='')
             self.writer = csv.writer(self.file)
             self.writer.writerow(self.header)
-

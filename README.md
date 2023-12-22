@@ -85,6 +85,7 @@ pip install numpy==1.22.4
 pip install pandas
 pip uninstall matplotlib
 pip install matplotlib==3.6
+pip install ftfy
 ```
 
 ### Autostart
