@@ -95,11 +95,11 @@ autostart can be setup by adding the following lines
 to `/etc/xdg/lxsession/LXDE-pi/autostart` :
 
 ```
-@lxterminal -e bash /home/pi/energy_monitor/raspberry/run_web_interface.sh
-@lxterminal -e bash /home/pi/energy_monitor/raspberry/run_web_data.sh
-@lxterminal -e bash /home/pi/energy_monitor/raspberry/run_data_recorder.sh
-@lxterminal -e bash /home/pi/energy_monitor/raspberry/run_minute_graph_builder.sh
-@lxterminal -e bash /home/pi/energy_monitor/raspberry/run_hour_graph_builder.sh
+@lxterminal -t web_interface -e bash /home/pi/energy_monitor/raspberry/run_web_interface.sh
+@lxterminal -t web_data -e bash /home/pi/energy_monitor/raspberry/run_web_data.sh
+@lxterminal -t data_recorder -e bash /home/pi/energy_monitor/raspberry/run_data_recorder.sh
+@lxterminal -t minute_graph_builder -e bash /home/pi/energy_monitor/raspberry/run_minute_graph_builder.sh
+@lxterminal -t hour_graph_builder -e bash /home/pi/energy_monitor/raspberry/run_hour_graph_builder.sh
 ```
 
 (from https://forums.raspberrypi.com/viewtopic.php?t=294014)
