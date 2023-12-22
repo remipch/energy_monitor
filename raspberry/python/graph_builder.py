@@ -78,41 +78,46 @@ class GraphBuilder:
         print("Update graph from ", input_csv_path)
         self.modification_time = modification_time
 
-        # Read last csv lines and add a time column
-        # it's safe to convert to datetime because we have one file per day
-        df = self.__readDayCsvLastLines(input_csv_path)
-        if 'second' in df.columns:
-            df['time'] = df['hour'].astype(str) + ':' + df['minute'].astype(str) + ':' + df['second'].astype(str)
-            df['time'] = pd.to_datetime(df['time'], format='%H:%M:%S') #.dt.time
-        else:
-            df['time'] = df['hour'].astype(str) + ':' + df['minute'].astype(str)
-            df['time'] = pd.to_datetime(df['time'], format='%H:%M') #.dt.time
+        try:
+            # Read last csv lines and add a time column
+            # it's safe to convert to datetime because we have one file per day
+            df = self.__readDayCsvLastLines(input_csv_path)
+            if 'second' in df.columns:
+                df['time'] = df['hour'].astype(str) + ':' + df['minute'].astype(str) + ':' + df['second'].astype(str)
+                df['time'] = pd.to_datetime(df['time'], format='%H:%M:%S') #.dt.time
+            else:
+                df['time'] = df['hour'].astype(str) + ':' + df['minute'].astype(str)
+                df['time'] = pd.to_datetime(df['time'], format='%H:%M') #.dt.time
 
-        max_time = df['time'].max()
-        min_time = max_time - self.time_span
+            max_time = df['time'].max()
+            min_time = max_time - self.time_span
 
-        # Filter rows after min_time
-        filtered_df = df[(df['time'] >= min_time)]
-        print(filtered_df)
-        times = filtered_df['time']
-        filtered_df = filtered_df[self.columns]
+            # Filter rows after min_time
+            filtered_df = df[(df['time'] >= min_time)]
+            print(filtered_df)
+            times = filtered_df['time']
+            filtered_df = filtered_df[self.columns]
 
-        # Set x axis scale
-        mid_time = min_time + (max_time - min_time) / 2
-        xticks = [min_time, mid_time, max_time]
-        xlabels = [x.strftime(self.time_label_format) for x in xticks]
-        self.ax.set_xticks(xticks, labels=xlabels)
-        self.ax.set_xlim(min_time, max_time)
+            # Set x axis scale
+            mid_time = min_time + (max_time - min_time) / 2
+            xticks = [min_time, mid_time, max_time]
+            xlabels = [x.strftime(self.time_label_format) for x in xticks]
+            self.ax.set_xticks(xticks, labels=xlabels)
+            self.ax.set_xlim(min_time, max_time)
 
-        # Update curves
-        for column, curve in zip(self.columns, self.curves):
-            curve.set_data(times, filtered_df[column])
+            # Update curves
+            for column, curve in zip(self.columns, self.curves):
+                curve.set_data(times, filtered_df[column])
 
-        # Recompute y autoscale and draw
-        self.ax.relim()
-        self.ax.autoscale_view(scaley=True, scalex=False)
-        self.fig.canvas.draw()
+            # Recompute y autoscale and draw
+            self.ax.relim()
+            self.ax.autoscale_view(scaley=True, scalex=False)
+            self.fig.canvas.draw()
 
-        # Write in a temp file and quick copy to output to avoid temporary broken file
-        self.fig.savefig(self.temp_image_path)
-        shutil.copy(self.temp_image_path, self.output_image_path)
+            # Write in a temp file and quick copy to output to avoid temporary broken file
+            self.fig.savefig(self.temp_image_path)
+            shutil.copy(self.temp_image_path, self.output_image_path)
+
+        except Exception as e:
+            print("Cannot update graph due to error: ", str(e))
+            print("Waiting file to be fixed")
