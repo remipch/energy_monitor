@@ -1,6 +1,7 @@
 from ftfy import fix_and_explain
 from glob import glob
 import os
+import shutil
 
 def repair_last_csv_in_directory(directory_path, csv_fields_count):
     pattern = f"{directory_path}/????-??-??.csv"
@@ -15,6 +16,9 @@ def repair_csv(csv_path, csv_fields_count):
     print(f"Try to detect problems in {csv_path}")
     with open(csv_path, 'r') as f:
         csv_data = f.read()
+
+    # Make a copy in case of problem with the fix
+    shutil.copy(csv_path, os.path.dirname(csv_path) + "/latest.csv.bak")
 
     problem_count = 0
     with open(csv_path, 'w') as f:
