@@ -65,7 +65,6 @@ while(True):
         minute_average_ma = [int(sum(meas)/len(meas)) for meas in zip(*minute_measures_ma)]
         all_fields = [previous_minute_time.hour, previous_minute_time.minute] + minute_average_ma
         print("Add minute: ", all_fields)
-        print("minute_measures_ma: ", minute_measures_ma)
 
         minutes_file.write(previous_minute_time, all_fields)
         minute_measures_ma = []

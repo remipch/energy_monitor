@@ -84,17 +84,17 @@ class GraphBuilder:
             df = self.__readDayCsvLastLines(input_csv_path)
             if 'second' in df.columns:
                 df['time'] = df['hour'].astype(str) + ':' + df['minute'].astype(str) + ':' + df['second'].astype(str)
-                df['time'] = pd.to_datetime(df['time'], format='%H:%M:%S') #.dt.time
+                df['time'] = pd.to_datetime(df['time'], format='%H:%M:%S')
             else:
                 df['time'] = df['hour'].astype(str) + ':' + df['minute'].astype(str)
-                df['time'] = pd.to_datetime(df['time'], format='%H:%M') #.dt.time
+                df['time'] = pd.to_datetime(df['time'], format='%H:%M')
 
             max_time = df['time'].max()
             min_time = max_time - self.time_span
 
             # Filter rows after min_time
             filtered_df = df[(df['time'] >= min_time)]
-            print(filtered_df)
+            print(f"  from {min_time.time()} to {max_time.time()} : {len(filtered_df)} measures")
             times = filtered_df['time']
             filtered_df = filtered_df[self.columns]
 
