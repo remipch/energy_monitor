@@ -38,9 +38,6 @@ MINUTES_MAX_SIZE_BYTES = 2000000000 # 2 GB
 # (10 s loss per minute is accepted)
 MINUTES_MIN_MEASURES_COUNT = 50
 
-LAST_MINUTE_IMAGE_PATH = "web/graphs/minute.svg"
-LAST_HOUR_IMAGE_PATH = "web/graphs/hour.svg"
-
 seconds_file = DataFile(seconds_directory, SECONDS_HEADER, SECONDS_MAX_SIZE_BYTES)
 
 minutes_file = DataFile(minutes_directory, MINUTES_HEADER, MINUTES_MAX_SIZE_BYTES)
