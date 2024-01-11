@@ -13,6 +13,10 @@ import pandas as pd
 # - have column 'hour' and 'minute'
 # - eventually have column 'second'
 
+# Minimal value for the max value of the y axis
+MIN_CURRENT_MAX_SCALE = 15000 # (mA)
+CURRENT_SCALE_MARGIN = 500 # (mA)
+
 def __readDayCsvLastLines(input_csv_path, line_count):
     with open(input_csv_path , 'r') as f:
         q = [f.readline()] # read the header
@@ -74,14 +78,16 @@ def build_graph(input_directory,
     ax.set_xticks(xticks, labels=xlabels)
     ax.set_xlim(min_time, max_time)
 
+    # Set y axis scale
+    max_current = MIN_CURRENT_MAX_SCALE
+    for column in columns:
+        max_current = max(max_current, filtered_df[column].max())
+    ax.set_ylim(0, max_current + CURRENT_SCALE_MARGIN)
+
     # Draw curves
     for column, label in zip(columns, labels):
         ax.plot(times, filtered_df[column], label=label)
     plt.legend()
-
-    # Recompute y autoscale and draw
-    ax.relim()
-    ax.autoscale_view(scaley=True, scalex=False)
 
     # Write in a temp file and quick copy to output to avoid temporary broken file
     plt.savefig(temp_image_path)
