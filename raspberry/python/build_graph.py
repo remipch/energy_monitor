@@ -86,7 +86,7 @@ def build_graph(input_directory,
 
     # Draw curves
     for column, label in zip(columns, labels):
-        ax.plot(times, filtered_df[column], label=label)
+        ax.step(times, filtered_df[column], label=label)
     plt.legend()
 
     # Write in a temp file and quick copy to output to avoid temporary broken file
