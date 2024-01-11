@@ -1,16 +1,13 @@
-from graph_builder import GraphBuilder
+from build_graph import build_graph
 from datetime import datetime,timedelta
 import time
 import os
 from pathlib import Path
 
-TODO: DELETE THIS FILE (replaced by build_minute_graph)
-OR replace matplotlib by lightweight alternative (without memory leak)
-
 # Get dir of the current python script
 python_directory = Path(os.path.abspath(__file__)).parent
 
-graph_builder = GraphBuilder(
+build_graph(
     python_directory / "../web/data/seconds/",
     100,
     ["a0(mA)", "a1(mA)"],
@@ -21,8 +18,3 @@ graph_builder = GraphBuilder(
     "%H:%M:%S",
     timedelta(minutes=1))
 
-print("Minute graph_builder started, waiting data from csv...")
-
-while True:
-    graph_builder.update(datetime.now())
-    time.sleep(0.2)

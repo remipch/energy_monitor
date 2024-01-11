@@ -6,6 +6,8 @@ from collections import deque
 from io import StringIO
 import pandas as pd
 
+TODO: DELETE THIS FILE (replaced by build_graph)
+OR replace matplotlib by lightweight alternative (without memory leak)
 
 # Input csv must :
 # - respect name pattern: yyyy-mm-dd.csv
