@@ -9,12 +9,12 @@ python_directory = Path(os.path.abspath(__file__)).parent
 
 build_graph(
     python_directory / "../web/data/minutes/",
-    100,
+    200,
     ["a3(mA)", "a2(mA)", "a1(mA)"],
     ["BEC", "Appoint", "PAC" ],
     python_directory / "../web/graphs/hour.svg",
-    "Last hour",
+    "Last 3 hours",
     "Current (mA)",
     "%H:%M",
-    timedelta(hours=1))
+    timedelta(hours=3))
 
