@@ -10,8 +10,8 @@ python_directory = Path(os.path.abspath(__file__)).parent
 build_graph(
     python_directory / "../web/data/seconds/",
     100,
-    ["a0(mA)", "a1(mA)"],
-    ["A0", "A1"],
+    ["a3(mA)", "a2(mA)", "a1(mA)"],
+    ["BEC", "Appoint", "PAC" ],
     python_directory / "../web/graphs/minute.svg",
     "Last minute",
     "Current (mA)",
