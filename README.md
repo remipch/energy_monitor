@@ -79,13 +79,11 @@ raspberry/              Runs on Raspberry
 ### Dependencies
 
 ```
-sudo apt-get install libopenblas-dev
-sudo apt-get install libatlas-base-dev
 pip install numpy==1.22.4
 pip install pandas
-pip uninstall matplotlib
 pip install matplotlib==3.6
 pip install ftfy
+sudo apt-get install libatlas-base-dev
 ```
 
 ### Autostart
