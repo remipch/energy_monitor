@@ -6,6 +6,8 @@ import shutil
 def repair_last_csv_in_directory(directory_path, csv_fields_count):
     pattern = f"{directory_path}/????-??-??.csv"
     sorted_files = sorted(glob(pattern), key=os.path.basename)
+    if len(sorted_files)==0:
+      return
     last_csv_file = sorted_files[-1]
     repair_csv(last_csv_file, csv_fields_count)
 
