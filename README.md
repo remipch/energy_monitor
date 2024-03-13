@@ -117,6 +117,29 @@ The default separator is a simple space, it can be changed with this command.
 - Command: `s<separator>`
 - Command example: `s;`
 
+### Bufferized voltages
+
+Measure and store unfiltered analog voltages as fast as possible.
+Print them all when the buffer is full (100 samples).
+
+- Command: `b`
+- Output example:
+```
+# Bufferized input ; duration(ms): 89 ; samples_count: 100
+# A7(mV) A6(mV) A5(mV) A4(mV) A3(mV) A2(mV) A1(mV) A0(mV)
+0 3137 2453 2106 0 1119 1779 2424
+0 1432 1730 1783 0 386 806 904
+0 263 806 1129 0 63 259 39
+0 0 180 547 0 0 4 0
+0 0 0 146 0 0 0 0
+0 122 43 0 0 0 9 366
+0 381 263 151 0 24 73 645
+0 625 527 386 0 53 141 943
+0 869 806 664 0 83 195 1197
+0 1080 1065 948 0 102 234 1368
+[90 remaining lines]
+```
+
 ### Unfiltered voltages
 
 Continuously measure and print unfiltered analog voltages.
