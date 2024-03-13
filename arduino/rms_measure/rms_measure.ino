@@ -11,7 +11,7 @@ static const int MIN_MEASURE_DURATION_MS = 40;
 static const int MAX_MEASURE_DURATION_MS = 10000;
 
 // Only used with "bufferized" mode
-static const int MEASURE_BUFFER_SIZE= 70; // Warning : high values cause out of memory instability
+static const int MEASURE_BUFFER_SIZE= 100; // Warning : high values cause out of memory instability
 int measure_buffer[MEASURE_BUFFER_SIZE][ANALOG_PINS_COUNT];
 
 // 3 modes
