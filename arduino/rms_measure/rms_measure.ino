@@ -10,6 +10,10 @@ static const int RMS_ANALOG_PINS_COUNT = sizeof(RMS_ANALOG_PINS)/sizeof(uint8_t)
 static const int MIN_MEASURE_DURATION_MS = 40;
 static const int MAX_MEASURE_DURATION_MS = 10000;
 
+// Only used with "bufferized" mode
+static const int MEASURE_BUFFER_SIZE= 70; // Warning : high values cause out of memory instability
+int measure_buffer[MEASURE_BUFFER_SIZE][ANALOG_PINS_COUNT];
+
 // 3 modes
 enum Mode {
   IDLE,
@@ -30,6 +34,32 @@ void setup() {
 // Convert analog input to millivolts
 int inputVoltage(long input) {
   return (input * 5000) / 1023;
+}
+
+void printBufferizedVoltage() {
+  // Bufferize measure as fast as possible
+  unsigned long start_time_ms = millis();
+  for(int i=0;i<MEASURE_BUFFER_SIZE;i++) {
+    for(int j=0;j<ANALOG_PINS_COUNT;j++) {
+      measure_buffer[i][j] = analogRead(ANALOG_PINS[j]);
+    }
+  }
+  unsigned long end_time_ms = millis();
+
+  // Print timing data
+  Serial.print("# duration(ms): ");
+  Serial.println(end_time_ms - start_time_ms);
+
+  // Convert to mV and print bufferized measures
+  Serial.println("# A7(mV) A6(mV) A5(mV) A4(mV) A3(mV) A2(mV) A1(mV) A0(mV)");
+  for(int i=0;i<MEASURE_BUFFER_SIZE;i++) {
+    for(int j=0;j<ANALOG_PINS_COUNT;j++) {
+      Serial.print(inputVoltage(measure_buffer[i][j]));
+      Serial.print(separator);
+    }
+    Serial.println();
+  }
+  Serial.println();
 }
 
 void printUnfilteredVoltage() {
@@ -78,6 +108,11 @@ void loop() {
       Serial.print("# Separator: \"");
       Serial.print(separator);
       Serial.println("\"");
+    }
+    else if (command == "b") { // Bufferized voltages
+      mode = IDLE;
+      Serial.println("# Bufferized input");
+      printBufferizedVoltage();
     }
     else if (command == "u") { // Unfiltered voltages
       mode = UNFILTERED_VOLTAGE;
