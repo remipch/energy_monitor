@@ -27,8 +27,8 @@ String separator = " ";
 
 void setup() {
   Serial.begin(115200);
-  Serial.println("# rms_measure.ino");
-  Serial.println("# Ready, waiting command...");
+  Serial.println(F("# rms_measure.ino"));
+  Serial.println(F("# Ready, waiting command..."));
 }
 
 // Convert analog input to millivolts
@@ -47,11 +47,11 @@ void printBufferizedVoltage() {
   unsigned long end_time_ms = millis();
 
   // Print timing data
-  Serial.print("# duration(ms): ");
+  Serial.print(F("# duration(ms): "));
   Serial.println(end_time_ms - start_time_ms);
 
   // Convert to mV and print bufferized measures
-  Serial.println("# A7(mV) A6(mV) A5(mV) A4(mV) A3(mV) A2(mV) A1(mV) A0(mV)");
+  Serial.println(F("# A7(mV) A6(mV) A5(mV) A4(mV) A3(mV) A2(mV) A1(mV) A0(mV)"));
   for(int i=0;i<MEASURE_BUFFER_SIZE;i++) {
     for(int j=0;j<ANALOG_PINS_COUNT;j++) {
       Serial.print(inputVoltage(measure_buffer[i][j]));
@@ -105,34 +105,34 @@ void loop() {
 
     if (command.startsWith("s")) { // Separator
       separator = command.substring(1);
-      Serial.print("# Separator: \"");
+      Serial.print(F("# Separator: \""));
       Serial.print(separator);
       Serial.println("\"");
     }
     else if (command == "b") { // Bufferized voltages
       mode = IDLE;
-      Serial.println("# Bufferized input");
+      Serial.println(F("# Bufferized input"));
       printBufferizedVoltage();
     }
     else if (command == "u") { // Unfiltered voltages
       mode = UNFILTERED_VOLTAGE;
-      Serial.println("# Unfiltered input");
-      Serial.println("# time(ms) A7(mV) A6(mV) A5(mV) A4(mV) A3(mV) A2(mV) A1(mV) A0(mV)");
+      Serial.println(F("# Unfiltered input"));
+      Serial.println(F("# time(ms) A7(mV) A6(mV) A5(mV) A4(mV) A3(mV) A2(mV) A1(mV) A0(mV)"));
     }
     else if (command.startsWith("r")) { // RMS voltages
       mode = RMS_VOLTAGE;
       measure_duration_ms = command.substring(1).toInt();
       measure_duration_ms = constrain(measure_duration_ms, MIN_MEASURE_DURATION_MS,  MAX_MEASURE_DURATION_MS);
-      Serial.print("# RMS voltage, measure_duration: ");
+      Serial.print(F("# RMS voltage, measure_duration: "));
       Serial.print(measure_duration_ms);
-      Serial.println(" ms");
-      Serial.println("# start_time(ms) end_time(ms) A6(mV) A5(mV) A4(mV) A3(mV) A2(mV) A1(mV) A0(mV) samples_count");
+      Serial.println(F(" ms"));
+      Serial.println(F("# start_time(ms) end_time(ms) A6(mV) A5(mV) A4(mV) A3(mV) A2(mV) A1(mV) A0(mV) samples_count"));
     }
     else {
       mode = IDLE;
-      Serial.print("# Unknown command: \"");
+      Serial.print(F("# Unknown command: \""));
       Serial.print(command);
-      Serial.println("\" -> STOP");
+      Serial.println(F("\" -> STOP"));
     }
   }
 
