@@ -47,8 +47,10 @@ void printBufferizedVoltage() {
   unsigned long end_time_ms = millis();
 
   // Print timing data
-  Serial.print(F("# duration(ms): "));
-  Serial.println(end_time_ms - start_time_ms);
+  Serial.print(F("# Bufferized input ; duration(ms): "));
+  Serial.print(end_time_ms - start_time_ms);
+  Serial.print(F(" ; samples_count: "));
+  Serial.println(MEASURE_BUFFER_SIZE);
 
   // Convert to mV and print bufferized measures
   Serial.println(F("# A7(mV) A6(mV) A5(mV) A4(mV) A3(mV) A2(mV) A1(mV) A0(mV)"));
@@ -111,7 +113,6 @@ void loop() {
     }
     else if (command == "b") { // Bufferized voltages
       mode = IDLE;
-      Serial.println(F("# Bufferized input"));
       printBufferizedVoltage();
     }
     else if (command == "u") { // Unfiltered voltages
