@@ -21,7 +21,7 @@ while True:
 
 # From A6 to A0: coeffs from mV to mA
 # depends on transformer ratio and burden resistor
-MEASURE_COEF = [30, 30, 30, 30, 30, 30, 30]
+MEASURE_COEF = [ 6.67, 6.67, 13.33, 30, 30, 30, 30 ]
 
 # Get dir of the current python script
 python_directory = Path(os.path.abspath(__file__)).parent
