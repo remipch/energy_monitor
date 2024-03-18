@@ -41,7 +41,7 @@ void printBufferizedVoltage(int input_mask) {
 
   int input_to_read[ANALOG_PINS_COUNT];
   int input_count = 0;
-  Serial.print("# time(us) ");
+  Serial.print("#time(us) ");
   for(int i=0;i<ANALOG_PINS_COUNT;i++) {
     int pin_bit = ANALOG_PINS_COUNT - 1 - i; // Because stored in reverse order in ANALOG_PINS
     if(input_mask&(1<<pin_bit)) {
@@ -130,7 +130,7 @@ void loop() {
     else if (command == "u") { // Unfiltered voltages
       mode = UNFILTERED_VOLTAGE;
       Serial.println(F("# Unfiltered input"));
-      Serial.println(F("# time(ms) A7(mV) A6(mV) A5(mV) A4(mV) A3(mV) A2(mV) A1(mV) A0(mV)"));
+      Serial.println(F("#time(ms) A7(mV) A6(mV) A5(mV) A4(mV) A3(mV) A2(mV) A1(mV) A0(mV)"));
     }
     else if (command.startsWith("r")) { // RMS voltages
       mode = RMS_VOLTAGE;
@@ -139,7 +139,7 @@ void loop() {
       Serial.print(F("# RMS voltage, measure_duration: "));
       Serial.print(measure_duration_ms);
       Serial.println(F(" ms"));
-      Serial.println(F("# start_time(ms) end_time(ms) A6(mV) A5(mV) A4(mV) A3(mV) A2(mV) A1(mV) A0(mV) samples_count"));
+      Serial.println(F("#start_time(ms) end_time(ms) A6(mV) A5(mV) A4(mV) A3(mV) A2(mV) A1(mV) A0(mV) samples_count"));
     }
     else {
       mode = IDLE;
