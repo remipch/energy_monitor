@@ -41,14 +41,15 @@ void printBufferizedVoltage(int input_mask) {
 
   int input_to_read[ANALOG_PINS_COUNT];
   int input_count = 0;
-  Serial.print("#time(us) ");
+  Serial.print("#time(us)");
   for(int i=0;i<ANALOG_PINS_COUNT;i++) {
     int pin_bit = ANALOG_PINS_COUNT - 1 - i; // Because stored in reverse order in ANALOG_PINS
     if(input_mask&(1<<pin_bit)) {
       input_to_read[input_count++] = i;
+      Serial.print(separator);
       Serial.print("A");
       Serial.print(pin_bit);
-      Serial.print("(mV) ");
+      Serial.print("(mV)");
     }
   }
 
