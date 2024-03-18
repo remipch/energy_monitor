@@ -11,8 +11,8 @@ static const int MIN_MEASURE_DURATION_MS = 40;
 static const int MAX_MEASURE_DURATION_MS = 10000;
 
 // Only used with "bufferized" mode
-static const int MEASURE_BUFFER_SIZE= 100; // Warning : high values cause out of memory instability
-int measure_buffer[MEASURE_BUFFER_SIZE][ANALOG_PINS_COUNT];
+static const int MEASURE_BUFFER_SIZE = 800; // Warning : high values cause out of memory instability
+int measure_buffer[MEASURE_BUFFER_SIZE];
 
 // 3 modes
 enum Mode {
@@ -36,30 +36,40 @@ int inputVoltage(long input) {
   return (input * 5000) / 1023;
 }
 
-void printBufferizedVoltage() {
-  // Bufferize measure as fast as possible
-  unsigned long start_time_ms = millis();
-  for(int i=0;i<MEASURE_BUFFER_SIZE;i++) {
-    for(int j=0;j<ANALOG_PINS_COUNT;j++) {
-      measure_buffer[i][j] = analogRead(ANALOG_PINS[j]);
+void printBufferizedVoltage(int input_mask) {
+  Serial.println(F("# Bufferized input"));
+
+  int input_to_read[ANALOG_PINS_COUNT];
+  int input_count = 0;
+  Serial.print("# time(us) ");
+  for(int i=0;i<ANALOG_PINS_COUNT;i++) {
+    int pin_bit = ANALOG_PINS_COUNT - 1 - i; // Because stored in reverse order in ANALOG_PINS
+    if(input_mask&(1<<pin_bit)) {
+      input_to_read[input_count++] = i;
+      Serial.print("A");
+      Serial.print(pin_bit);
+      Serial.print("(mV) ");
     }
   }
-  unsigned long end_time_ms = millis();
 
-  // Print timing data
-  Serial.print(F("# Bufferized input ; duration(ms): "));
-  Serial.print(end_time_ms - start_time_ms);
-  Serial.print(F(" ; samples_count: "));
-  Serial.println(MEASURE_BUFFER_SIZE);
+  int measure_count = input_count * (MEASURE_BUFFER_SIZE / input_count);
+
+  // Bufferize measures as fast as possible
+  unsigned long start_time_us = micros();
+  for(int i=0;i<measure_count;i++) {
+    measure_buffer[i] = analogRead(ANALOG_PINS[input_to_read[i%input_count]]);
+  }
+  unsigned long end_time_us = micros();
 
   // Convert to mV and print bufferized measures
-  Serial.println(F("# A7(mV) A6(mV) A5(mV) A4(mV) A3(mV) A2(mV) A1(mV) A0(mV)"));
-  for(int i=0;i<MEASURE_BUFFER_SIZE;i++) {
-    for(int j=0;j<ANALOG_PINS_COUNT;j++) {
-      Serial.print(inputVoltage(measure_buffer[i][j]));
+  for(int i=0;i<measure_count;i++) {
+    if((i%input_count)==0) {
+      Serial.println();
+      Serial.print((i * (end_time_us-start_time_us))/MEASURE_BUFFER_SIZE);
       Serial.print(separator);
     }
-    Serial.println();
+    Serial.print(inputVoltage(measure_buffer[i]));
+    Serial.print(separator);
   }
   Serial.println();
 }
@@ -111,9 +121,11 @@ void loop() {
       Serial.print(separator);
       Serial.println("\"");
     }
-    else if (command == "b") { // Bufferized voltages
+    else if (command.startsWith("b")) { // Bufferized voltages
+      String arg = command.substring(1);
       mode = IDLE;
-      printBufferizedVoltage();
+      int input_mask = (arg.length()>0) ? arg.toInt() : 0xFF;
+      printBufferizedVoltage(input_mask);
     }
     else if (command == "u") { // Unfiltered voltages
       mode = UNFILTERED_VOLTAGE;
