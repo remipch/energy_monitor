@@ -66,10 +66,9 @@ void printBufferizedVoltage(int input_mask) {
     if((i%input_count)==0) {
       Serial.println();
       Serial.print((i * (end_time_us-start_time_us))/MEASURE_BUFFER_SIZE);
-      Serial.print(separator);
     }
-    Serial.print(inputVoltage(measure_buffer[i]));
     Serial.print(separator);
+    Serial.print(inputVoltage(measure_buffer[i]));
   }
   Serial.println();
 }
