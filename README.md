@@ -120,24 +120,26 @@ The default separator is a simple space, it can be changed with this command.
 ### Bufferized voltages
 
 Measure and store unfiltered analog voltages as fast as possible.
-Print them all when the buffer is full (100 samples).
+Print them all when the buffer is full (800 total samples).
+Optional input_mask parameter allows to select a subset of the 8 analog inputs.
 
-- Command: `b`
+- Command: `b<input_mask>`
+- Command example: `b5`
 - Output example:
 ```
-# Bufferized input ; duration(ms): 89 ; samples_count: 100
-# A7(mV) A6(mV) A5(mV) A4(mV) A3(mV) A2(mV) A1(mV) A0(mV)
-0 3137 2453 2106 0 1119 1779 2424
-0 1432 1730 1783 0 386 806 904
-0 263 806 1129 0 63 259 39
-0 0 180 547 0 0 4 0
-0 0 0 146 0 0 0 0
-0 122 43 0 0 0 9 366
-0 381 263 151 0 24 73 645
-0 625 527 386 0 53 141 943
-0 869 806 664 0 83 195 1197
-0 1080 1065 948 0 102 234 1368
-[90 remaining lines]
+# Bufferized input
+#time(us) A2(mV) A0(mV) 
+0 1935 2018 
+256 2003 2096 
+512 2082 2209 
+768 2170 2287 
+1024 2262 2375 
+1280 2355 2458 
+1536 2438 2536 
+1792 2517 2619 
+3072 2869 2952 
+3328 2917 2986 
+[390 remaining lines]
 ```
 
 ### Unfiltered voltages
@@ -148,7 +150,7 @@ Continuously measure and print unfiltered analog voltages.
 - Output example:
 ```
 # Unfiltered input
-# time(ms) A7(mV) A6(mV) A5(mV) A4(mV) A3(mV) A2(mV) A1(mV) A0(mV)
+#time(ms) A7(mV) A6(mV) A5(mV) A4(mV) A3(mV) A2(mV) A1(mV) A0(mV)
 12120 3347 2624 2502 1715 1285 977 2614 2878
 12123 3010 2864 2502 2218 1969 1739 2614 2878
 12127 2937 2922 2502 2605 2624 2556 2614 2878
@@ -171,7 +173,7 @@ Continuously measure, compute and print RMS voltages over the given measure dura
 - Output example:
 ```
 # RMS voltage, measure_duration: 500 ms
-# start_time(ms) end_time(ms) A6(mV) A5(mV) A4(mV) A3(mV) A2(mV) A1(mV) A0(mV) samples_count
+#start_time(ms) end_time(ms) A6(mV) A5(mV) A4(mV) A3(mV) A2(mV) A1(mV) A0(mV) samples_count
 32367 32868 39 351 386 439 498 239 39 288
 32871 33372 24 356 386 434 493 239 24 288
 33374 33874 24 356 386 439 498 239 24 288
