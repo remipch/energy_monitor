@@ -121,7 +121,7 @@ The default separator is a simple space, it can be changed with this command.
 
 Measure and store unfiltered analog voltages as fast as possible.
 Print them all when the buffer is full (800 total samples).
-Optional input_mask parameter allows to select a subset of the 8 analog inputs.
+Optional input_mask parameter allows to select a subset of the 8 analog inputs by passing the decimal value of the mask of inputs to activate (for example 128 activates A7 and 65 activates A0 and A6).
 
 - Command: `b<input_mask>`
 - Command example: `b5`
