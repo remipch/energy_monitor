@@ -90,6 +90,8 @@ def build_graph(input_directory,
     plt.legend()
 
     # Write in a temp file and quick copy to output to avoid temporary broken file
+    os.remove(temp_image_path)
     plt.savefig(temp_image_path)
+    os.remove(output_image_path)
     shutil.copy(temp_image_path, output_image_path)
 
