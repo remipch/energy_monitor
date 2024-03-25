@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Wait for data_recorder to eventually fix problem in input data file
+sleep 10s
+
 # Note: doing the while loop in python leads to out of memory error because
 # it's not possible to completely clear matplotlib memory after graph creation
 
